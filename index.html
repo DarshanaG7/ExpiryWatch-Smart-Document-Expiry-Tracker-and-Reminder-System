@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document Expiry Alerts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Document expiry alerts</h1>
+      <p id="today" class="muted"></p>
+    </div>
+    <div class="top-actions">
+      <label class="inline">Default reminder
+        <input type="number" id="defaultReminder" min="1" max="365"> days
+      </label>
+      <button class="btn ghost" id="saveSettings">Save</button>
+      <a class="btn" href="/api/report">Download report</a>
+    </div>
+  </header>
+
+  <main>
+    <section aria-label="Urgency dashboard">
+      <h2>Urgency dashboard</h2>
+      <div class="urgency">
+        <article class="tile t-expired"><span class="num" id="cExpired">0</span><span class="lbl">Expired</span></article>
+        <article class="tile t-critical"><span class="num" id="c7">0</span><span class="lbl">Expiring within 7 days</span></article>
+        <article class="tile t-warning"><span class="num" id="c15">0</span><span class="lbl">Expiring within 15 days</span></article>
+        <article class="tile t-upcoming"><span class="num" id="c30">0</span><span class="lbl">Expiring within 30 days</span></article>
+        <article class="tile t-safe"><span class="num" id="cSafe">0</span><span class="lbl">Valid beyond 30 days</span></article>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <h2 id="formTitle">Add a document</h2>
+        <form id="docForm" novalidate>
+          <label>Document name
+            <input id="name" required maxlength="80" placeholder="e.g. Passport">
+          </label>
+          <label>Type
+            <select id="type">
+              <option>Licence</option><option>Passport</option><option>Insurance</option>
+              <option>Pollution Certificate</option><option>ID Card</option><option>Other</option>
+            </select>
+          </label>
+          <label>Expiry date
+            <input type="date" id="expiry" required>
+          </label>
+          <label>Remind me before (days)
+            <input type="number" id="reminder" min="1" max="365">
+          </label>
+          <p id="formError" class="error" role="alert"></p>
+          <div class="row">
+            <button class="btn primary" type="submit" id="submitBtn">Add document</button>
+            <button class="btn ghost" type="button" id="cancelEdit" hidden>Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h2>Upcoming expiry alerts</h2>
+        <ul id="alerts" class="alerts"></ul>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="list-head">
+        <h2>All documents</h2>
+        <div class="chips" id="filters">
+          <button class="chip active" data-f="all">All</button>
+          <button class="chip" data-f="expired">Expired</button>
+          <button class="chip" data-f="critical">Critical</button>
+          <button class="chip" data-f="warning">Warning</button>
+          <button class="chip" data-f="upcoming">Upcoming</button>
+          <button class="chip" data-f="safe">Safe</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Document</th><th>Expiry date</th><th>Time left</th><th>Status</th><th>Reminder</th><th></th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p id="empty" class="muted" hidden>No documents here. Add one with the form above.</p>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
